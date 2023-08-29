@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebAPIDemo.Models
+namespace WebAPIDemo.Models.CustomValidations
 {
-    
-    public class CorrectSizingAttribute:ValidationAttribute
+
+    public class CorrectSizingAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {

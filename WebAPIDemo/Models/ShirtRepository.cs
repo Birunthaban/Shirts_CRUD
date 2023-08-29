@@ -1,13 +1,15 @@
-﻿namespace WebAPIDemo.Models
+﻿using WebAPIDemo.Models.CustomValidations;
+
+namespace WebAPIDemo.Models
 {
     public static class ShirtRepository
     {
         private static List<Shirt> shirts = new List<Shirt>()
     {
         new Shirt { Id = 1, Brand = "PUMA", Color = "Blue", Gender = "Men", Size = 10, Price = 2000 },
-         new Shirt { Id = 2, Brand = "NIKE", Color = "Green", Gender = "Women", Size = 7, Price = 3000 },
-          new Shirt { Id = 3, Brand = "PUMA", Color = "Yellow", Gender = "Men", Size = 9, Price = 4000 },
-           new Shirt { Id = 4, Brand = "NIKE", Color = "Red", Gender = "Woen", Size = 8, Price = 5000 },
+        new Shirt { Id = 2, Brand = "NIKE", Color = "Green", Gender = "Women", Size = 7, Price = 3000 },
+        new Shirt { Id = 3, Brand = "PUMA", Color = "Yellow", Gender = "Men", Size = 9, Price = 4000 },
+        new Shirt { Id = 4, Brand = "NIKE", Color = "Red", Gender = "Woen", Size = 8, Price = 5000 },
      };
         public static bool ShirtExists(int id)
         {
@@ -52,6 +54,16 @@
             shirtToUpdate.Gender = shirt.Gender;
             shirtToUpdate.Color = shirt.Color;
             shirtToUpdate.Size = shirt.Size;
+        }
+
+        public static void DeleteShirtById (int shirtId)
+        {
+          var shirt = getShirtById(shirtId);
+            if (shirt != null)
+            {
+                shirts.Remove(shirt);
+
+            }
         }
     }
 }

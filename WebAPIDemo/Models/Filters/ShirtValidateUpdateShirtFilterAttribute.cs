@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WebAPIDemo.Models.CustomValidations;
 
-namespace WebAPIDemo.Models
+namespace WebAPIDemo.Models.Filters
 {
-    public class ShirtValidateUpdateShirtFilterAttribute :ActionFilterAttribute
+    public class ShirtValidateUpdateShirtFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -11,7 +12,8 @@ namespace WebAPIDemo.Models
             var id = context.ActionArguments["id"] as int?;
             var shirt = context.ActionArguments["shirt"] as Shirt;
 
-            if (id.HasValue && shirt!=null && id != shirt.Id) {
+            if (id.HasValue && shirt != null && id != shirt.Id)
+            {
                 context.ModelState.AddModelError("shirt", "shirt id is not same as id");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {

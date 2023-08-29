@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace WebAPIDemo.Models
+namespace WebAPIDemo.Models.Filters
 {
     public class ShirtHandleUpdateExceptionFilterAttribute : ExceptionFilterAttribute
     {
@@ -9,11 +9,11 @@ namespace WebAPIDemo.Models
         {
             base.OnException(context);
             var strShirtId = context.RouteData.Values["id"] as string;
-            if (int.TryParse(strShirtId,out int shirtID))
+            if (int.TryParse(strShirtId, out int shirtID))
             {
-                if(!ShirtRepository.ShirtExists(shirtID))
+                if (!ShirtRepository.ShirtExists(shirtID))
                 {
-                    context.ModelState.AddModelError("ShirtId", "Shirt Doesn't Exist");
+                    context.ModelState.AddModelError("ShirtId", "Shirt Doesn't Exist Anymore");
                     var problemDetails = new ValidationProblemDetails(context.ModelState)
                     {
                         Status = StatusCodes.Status404NotFound

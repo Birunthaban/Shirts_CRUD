@@ -1,32 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using WebAPIDemo.Data;
 using WebAPIDemo.Models;
+using WebAPIDemo.Models.CustomValidations;
+using WebAPIDemo.Models.Filters;
 
 namespace WebAPIDemo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class ShirtsController : ControllerBase
-
+        
     {
-
+        private readonly ApplicationDbContext db;
+        public ShirtsController(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
 
         [HttpGet]
         public IActionResult GetShirts()
         {
-            return Ok(ShirtRepository.getAllShirts());
+            return Ok(db.Shirts.ToList());
         }
 
         [HttpGet("{id}")]
-        [ShirtIdValidationFilter]
+        [TypeFilter(typeof(ShirtIdValidationFilterAttribute))]
         public IActionResult GetParticularShirt(int id)
         {
 
-            return Ok(ShirtRepository.getShirtById(id));
+            return Ok(HttpContext.Items["shirt"]);
         }
 
         [HttpPut("{id}")]
-        //[ShirtIdValidationFilter]
+        [TypeFilter(typeof(ShirtIdValidationFilterAttribute))]
         [ShirtValidateUpdateShirtFilter]
         [ShirtHandleUpdateExceptionFilter]
         public IActionResult UpdateShirt(int id , Shirt shirt)
@@ -37,7 +44,7 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ShirtIdValidationFilter]
+        [TypeFilter(typeof(ShirtIdValidationFilterAttribute))]
 
         public IActionResult DeleteShirt(int id)
         {
@@ -47,12 +54,12 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpPost]
-        [ShirtValidateShirtCreateFilter]
+        [TypeFilter(typeof(ShirtValidateShirtCreateFilterAttribute))]
         public IActionResult CreateShirt([FromBody] Shirt shirt)
 
         {
-
-            ShirtRepository.createShirt(shirt);
+            this.db.Shirts.Add(shirt);
+            this.db.SaveChanges();
             return CreatedAtAction(nameof(GetParticularShirt),
                 new
                 { id = shirt.Id },
